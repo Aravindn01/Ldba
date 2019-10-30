@@ -8,10 +8,8 @@ resource "aws_key_pair" "deployer" {
 
 resource "aws_instance" "jazz" {
 
-  #provider =  "${var.myprovider}"
+
   provider =  "aws.aravind"
-  
-  #provider = var.myprovider
   ami           = "ami-0a74bfeb190bd404f"
   instance_type = "t2.micro"
   key_name = "deployer-key"
