@@ -1,5 +1,6 @@
 #Resource for Aravind's account
 
+
 resource "aws_key_pair" "deployer" {
   key_name   = "deployer-key"
   public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDYLJRpOFY6oqejmvL7y4OjXDXrHzNYh2ahXmsb5qWy6d/LQVMWqv2hCe7cAuliaQ5cnEelsYFkKQEGwmyOhyCL4NfX1XK7XxrWmWHwxbGRuV/NK8YKVWrRNft+uy2MpsJ0lGwsmFgtj0qKXejaR1tjgqch8umSfKZt8d+Ge7vceU0ahXkcK8sUH29DUXDOk/CPMJq3cjTuEyJLUKO7fWNl63cwP4d1JgLkqbhNc8MM9tCqXhsrqoH/omelcmMtkLYnAlDmRwi0hJJTeibLrYOpxBk9KT+yLLkyZrKrXDfjkUvO6CWmTWmM3zV1XQUVF9qER7ii+/mBVFk8xFaH0dYj aravind@aravind-MintBox"
@@ -7,7 +8,6 @@ resource "aws_key_pair" "deployer" {
 
 
 resource "aws_instance" "jazz" {
-
 
   provider =  "aws.aravind"
   ami           = "ami-0a74bfeb190bd404f"
@@ -17,6 +17,33 @@ resource "aws_instance" "jazz" {
   tags = {
    Name = "aravind"
      }
+}
+
+
+
+resource "aws_instance" "example" {
+  #ami           = var.AMIS[var.AWS_REGION]
+  ami           = "${lookup(var.AMIS, var.AWS_OS)}"
+  instance_type = "t2.micro"  
+
+}
+
+
+
+resource "aws_iam_user" "iamuser_list" {
+  count = "${length(var.names)}"
+  name = "${var.names[count.index]}"
+}
+
+
+/*
+resource "aws_iam_user" "example" {
+  count = "${var.numofusers}"
+  name  = "aravind${count.index}"
+}
+*/
+
+
 
 /*
 #Resource for Rajesh's account
@@ -106,34 +133,6 @@ connection {
         }
       }
       */
-}
 
 
 
-
-variable "numofusers" {
-  type = number
-  description = "This is for demo of number variable"
-  default = 2
-}
-
-variable "names" {
-    type    = "list"
-    default = ["Red", "Blue", "Green"]
-    description = "This is for demo of list variable"
-}
-
-
-
-resource "aws_iam_user" "iamuser_list" {
-  count = "${length(var.names)}"
-  name = "${var.names[count.index]}"
-}
-
-
-/*
-resource "aws_iam_user" "example" {
-  count = "${var.numofusers}"
-  name  = "aravind${count.index}"
-}
-*/
